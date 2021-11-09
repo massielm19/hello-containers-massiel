@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: massiel-pyxis
+  namespace: default
+  labels:
+     app: massiel-pyxis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: massiel-pyxis
+  template:
+    metadata:
+      labels:
+        app: massiel-pyxis
+    spec:
+      containers:
+      - name: massiel-pyxis
+        image: us.icr.io/<namespace>/<image>:<tag>
+        ports:
+          - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: servicionuevo-massiel-pyis
+  namespace: default
+spec:
+  type: ClusterIP
+  selector:
+    app: massiel-pyxis
+  ports:
+    - port: 8080
+      targetPort: 8080
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+    name: ruta-massiel
+    namespace: default
+spec:
+    to:
+        kind: Service
+        name: servicionuevo-massiel-pyis
+
+
+
+
+
+
+
